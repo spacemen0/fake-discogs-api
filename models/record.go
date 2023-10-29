@@ -18,8 +18,8 @@ type Record struct {
 }
 
 type Filter struct {
-	Field string
-	Value interface{}
+	Field string `json:"field"`
+	Value string `json:"value"`
 }
 
 func CreateRecord(db *gorm.DB, title, artist string, genre string, releaseYear uint, description string, price float64, status string, sellerID uint) (*Record, error) {
@@ -41,7 +41,7 @@ func CreateRecord(db *gorm.DB, title, artist string, genre string, releaseYear u
 	return record, nil
 }
 
-func UpdateRecord(db *gorm.DB, recordID uint, title, artist string, genre string, releaseYear uint, description string, price float64, status string, sellerID uint) (*Record, error) {
+func UpdateRecord(db *gorm.DB, recordID uint, title, artist string, genre string, releaseYear uint, description string, price float64, status string) (*Record, error) {
 	record, err := GetRecordByID(db, recordID)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,6 @@ func UpdateRecord(db *gorm.DB, recordID uint, title, artist string, genre string
 	record.Description = description
 	record.Price = price
 	record.Status = status
-	record.SellerID = sellerID
 
 	if err = db.Save(record).Error; err != nil {
 		return nil, err

@@ -2,6 +2,7 @@ package main
 
 import (
 	"NewApp/config"
+	"NewApp/db"
 	"NewApp/server"
 	"flag"
 	"fmt"
@@ -16,5 +17,6 @@ func main() {
 	}
 	flag.Parse()
 	config.Init(*environment)
+	db.Init()
 	server.Init()
 }
