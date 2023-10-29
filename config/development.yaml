@@ -14,7 +14,7 @@ database:
 # Logging configuration
 logging:
   level: debug
-  file: /path/to/logfile.log
+  file: log.log
 
 # JWT configuration
 jwt:
