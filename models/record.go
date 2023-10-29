@@ -10,17 +10,24 @@ type Record struct {
 	Title       string `gorm:"not null"`
 	Artist      string `gorm:"not null"`
 	ReleaseYear uint   `gorm:"not null"`
+	Genre       string `gorm:"not null"`
 	Description string
 	Price       float64 `gorm:"not null"`
 	Status      string  `gorm:"not null"`
 	SellerID    uint    `gorm:"not null"`
 }
 
-func CreateRecord(db *gorm.DB, title, artist string, releaseYear uint, description string, price float64, status string, sellerID uint) (*Record, error) {
+type Filter struct {
+	Field string
+	Value interface{}
+}
+
+func CreateRecord(db *gorm.DB, title, artist string, genre string, releaseYear uint, description string, price float64, status string, sellerID uint) (*Record, error) {
 	record := &Record{
 		Title:       title,
 		Artist:      artist,
 		ReleaseYear: releaseYear,
+		Genre:       genre,
 		Description: description,
 		Price:       price,
 		Status:      status,
@@ -34,7 +41,7 @@ func CreateRecord(db *gorm.DB, title, artist string, releaseYear uint, descripti
 	return record, nil
 }
 
-func UpdateRecord(db *gorm.DB, recordID uint, title, artist string, releaseYear uint, description string, price float64, status string, sellerID uint) (*Record, error) {
+func UpdateRecord(db *gorm.DB, recordID uint, title, artist string, genre string, releaseYear uint, description string, price float64, status string, sellerID uint) (*Record, error) {
 	record, err := GetRecordByID(db, recordID)
 	if err != nil {
 		return nil, err
@@ -43,6 +50,7 @@ func UpdateRecord(db *gorm.DB, recordID uint, title, artist string, releaseYear 
 	record.Title = title
 	record.Artist = artist
 	record.ReleaseYear = releaseYear
+	record.Genre = genre
 	record.Description = description
 	record.Price = price
 	record.Status = status
@@ -77,8 +85,15 @@ func GetRecordByID(db *gorm.DB, recordID uint) (*Record, error) {
 	return &record, nil
 }
 
-func GetAllRecords(db *gorm.DB) ([]Record, error) {
+func GetAllRecords(db *gorm.DB, filters []Filter) ([]Record, error) {
 	var records []Record
+
+	query := db
+
+	for _, filter := range filters {
+		query = query.Where(filter.Field, filter.Value)
+	}
+
 	if err := db.Find(&records).Error; err != nil {
 		return nil, err
 	}
@@ -86,9 +101,16 @@ func GetAllRecords(db *gorm.DB) ([]Record, error) {
 	return records, nil
 }
 
-func GetRecordsBySellerID(db *gorm.DB, sellerID uint) ([]Record, error) {
+func GetRecordsBySellerID(db *gorm.DB, filters []Filter, sellerID uint) ([]Record, error) {
 	var records []Record
-	if err := db.Where("seller_id = ?", sellerID).Find(&records).Error; err != nil {
+
+	query := db.Where("seller_id = ?", sellerID)
+
+	for _, filter := range filters {
+		query = query.Where(filter.Field, filter.Value)
+	}
+
+	if err := query.Find(&records).Error; err != nil {
 		return nil, err
 	}
 
