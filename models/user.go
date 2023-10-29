@@ -26,6 +26,33 @@ func CreateUser(db *gorm.DB, username, email, password string) (*User, error) {
 	return user, nil
 }
 
+func UpdateUser(db *gorm.DB, userID uint, username, email, password string) (*User, error) {
+	user, err := GetUserByID(db, userID)
+	if err != nil {
+		return nil, err
+	}
+	user.Username = username
+	user.Email = email
+	user.Password = password
+	if err = db.Save(user).Error; err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func DeleteUser(db *gorm.DB, userID uint) error {
+	var user User
+	if err := db.First(&user, userID).Error; err != nil {
+		return err
+	}
+	if err := db.Delete(&user).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func GetUserByID(db *gorm.DB, userID uint) (*User, error) {
 	var user User
 	if err := db.First(&user, userID).Error; err != nil {
