@@ -1,0 +1,22 @@
+# Server configuration
+server:
+  port: 8080
+  mode: debug
+
+# Database configuration
+database:
+  host: localhost
+  port: 5432
+  name: dbname
+  user: dbuser
+  password: dbpassword
+
+# Logging configuration
+logging:
+  level: debug
+  file: /path/to/logfile.log
+
+# JWT configuration
+jwt:
+  secret: your-secret-key
+  expiration: 3600 # in seconds
