@@ -9,9 +9,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var allowedFields = []string{"title", "artist", "genre", "release_year", "description", "price", "status", "seller_id"}
+var allowedStatuses = []string{"available", "reserved", "sold"}
+var allowedGenres = []string{"rock", "pop", "jazz", "hip-hop", "electronic", "classical", "metal", "country", "folk", "blues", "reggae", "latin", "punk", "indie", "r&b", "soul", "funk", "dance", "world", "experimental", "new age", "spoken", "children's", "comedy", "other"}
+
+func isFieldAllowed(field string) bool {
+	for _, allowedField := range allowedFields {
+		if field == allowedField {
+			return true
+		}
+	}
+	return false
+}
+
 func CreateRecord(c *gin.Context) {
 	var record models.Record
-	if err := c.ShouldBindJSON(&record); err != nil {
+	if err := c.BindJSON(&record); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -33,7 +46,7 @@ func UpdateRecord(c *gin.Context) {
 	}
 
 	var record models.Record
-	if err := c.ShouldBindJSON(&record); err != nil {
+	if err := c.BindJSON(&record); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -87,6 +100,12 @@ func GetAllRecords(c *gin.Context) {
 		return
 	}
 
+	for _, filter := range filters {
+		if !isFieldAllowed(filter.Field) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid field"})
+			return
+		}
+	}
 	records, err := models.GetAllRecords(db.GetDB(), filters)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -107,6 +126,12 @@ func GetRecordsBySellerID(c *gin.Context) {
 	if err := c.BindJSON(&filters); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
+	}
+	for _, filter := range filters {
+		if !isFieldAllowed(filter.Field) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid field"})
+			return
+		}
 	}
 	records, err := models.GetRecordsBySellerID(db.GetDB(), filters, uint(sellerID))
 	if err != nil {

@@ -7,14 +7,14 @@ import (
 type Record struct {
 	gorm.Model
 
-	Title       string `gorm:"not null"`
-	Artist      string `gorm:"not null"`
-	ReleaseYear uint   `gorm:"not null"`
-	Genre       string `gorm:"not null"`
+	Title       string `gorm:"not null" json:"title" binding:"required"`
+	Artist      string `gorm:"not null" json:"artist" binding:"required"`
+	ReleaseYear uint   `gorm:"not null" json:"release_year" binding:"required"`
+	Genre       string `gorm:"not null" json:"genre" binding:"required"`
 	Description string
-	Price       float64 `gorm:"not null"`
-	Status      string  `gorm:"not null"`
-	SellerID    uint    `gorm:"not null"`
+	Price       float64 `gorm:"not null" json:"price" binding:"required"`
+	Status      string  `gorm:"not null" json:"status" binding:"required"`
+	SellerID    uint    `gorm:"not null" json:"seller_id" binding:"required"`
 }
 
 type Filter struct {
@@ -93,7 +93,7 @@ func GetAllRecords(db *gorm.DB, filters []Filter) ([]Record, error) {
 		query = query.Where(filter.Field, filter.Value)
 	}
 
-	if err := db.Find(&records).Error; err != nil {
+	if err := query.Find(&records).Error; err != nil {
 		return nil, err
 	}
 
