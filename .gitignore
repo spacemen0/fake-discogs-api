@@ -1,1 +1,9 @@
 *.yaml
+*.mod
+*.sum
+*.log
+/tmp
+/build
+/dist
+/.vscode
+
