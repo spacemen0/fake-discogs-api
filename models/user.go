@@ -7,9 +7,9 @@ import (
 type User struct {
 	gorm.Model
 
-	Username string `gorm:"unique;not null"`
-	Email    string `gorm:"unique;not null"`
-	Password string `gorm:"not null"`
+	Username string `gorm:"unique;not null" json:"username"`
+	Email    string `gorm:"unique;not null" json:"email"`
+	Password string `gorm:"not null" json:"password"`
 }
 
 func CreateUser(db *gorm.DB, username, email, password string) (*User, error) {
@@ -71,11 +71,18 @@ func GetUserByUsername(db *gorm.DB, username string) (*User, error) {
 	return &user, nil
 }
 
-func GetUserByEmail(db *gorm.DB, email string) (*User, error) {
-	var user User
-	if err := db.Where("email = ?", email).First(&user).Error; err != nil {
-		return nil, err
+func UsernameExist(db *gorm.DB, username string) bool {
+	var count int64
+	if err := db.Model(&User{}).Where("username = ?", username).Count(&count).Error; err != nil {
+		return false
 	}
+	return count > 0
+}
 
-	return &user, nil
+func EmailExist(db *gorm.DB, email string) bool {
+	var count int64
+	if err := db.Model(&User{}).Where("email = ?", email).Count(&count).Error; err != nil {
+		return false
+	}
+	return count > 0
 }

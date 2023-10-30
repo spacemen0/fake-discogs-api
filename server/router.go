@@ -18,5 +18,12 @@ func NewRouter() *gin.Engine {
 		v1.PUT("/update-record/:id", controllers.UpdateRecord)
 		v1.DELETE("delete-record/:id", controllers.DeleteRecord)
 	}
+	{
+		v1.GET("get-user/:id", controllers.GetUserByID)
+		v1.GET("get-user-by-username/:username", controllers.GetUserByUsername)
+		v1.POST("/create-user", controllers.CreateUser)
+		v1.PUT("/update-user/:id", controllers.UpdateUser)
+		v1.DELETE("delete-user/:id", controllers.DeleteUser)
+	}
 	return router
 }
