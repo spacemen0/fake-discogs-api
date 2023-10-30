@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"NewApp/db"
+	"NewApp/database"
 	"NewApp/models"
 	"net/http"
 	"strconv"
@@ -16,16 +16,16 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	if models.UsernameExist(db.GetDB(), user.Username) {
+	if models.UsernameExist(database.GetDB(), user.Username) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Username already exists"})
 		return
 	}
-	if models.EmailExist(db.GetDB(), user.Email) {
+	if models.EmailExist(database.GetDB(), user.Email) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Email already exists"})
 		return
 	}
 
-	newUser, err := models.CreateUser(db.GetDB(), user.Username, user.Email, user.Password)
+	newUser, err := models.CreateUser(database.GetDB(), user.Username, user.Email, user.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -45,15 +45,15 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	if models.UsernameExist(db.GetDB(), user.Username) {
+	if models.UsernameExist(database.GetDB(), user.Username) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Username already exists"})
 		return
 	}
-	if models.EmailExist(db.GetDB(), user.Email) {
+	if models.EmailExist(database.GetDB(), user.Email) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Email already exists"})
 		return
 	}
-	updatedUser, err := models.UpdateUser(db.GetDB(), uint(userID), user.Username, user.Email, user.Password)
+	updatedUser, err := models.UpdateUser(database.GetDB(), uint(userID), user.Username, user.Email, user.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -67,7 +67,7 @@ func DeleteUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
-	err = models.DeleteUser(db.GetDB(), uint(userID))
+	err = models.DeleteUser(database.GetDB(), uint(userID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -81,7 +81,7 @@ func GetUserByID(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
-	user, err := models.GetUserByID(db.GetDB(), uint(userID))
+	user, err := models.GetUserByID(database.GetDB(), uint(userID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -91,10 +91,20 @@ func GetUserByID(c *gin.Context) {
 
 func GetUserByUsername(c *gin.Context) {
 	username := c.Param("username")
-	user, err := models.GetUserByUsername(db.GetDB(), username)
+	user, err := models.GetUserByUsername(database.GetDB(), username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, user)
+}
+
+func GetUsersByUsername(c *gin.Context) {
+	username := c.Param("username")
+	users, err := models.GetUsersByUsername(database.GetDB(), username)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, users)
 }

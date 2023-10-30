@@ -71,6 +71,16 @@ func GetUserByUsername(db *gorm.DB, username string) (*User, error) {
 	return &user, nil
 }
 
+func GetUsersByUsername(db *gorm.DB, username string) ([]User, error) {
+	var users []User
+
+	if err := db.Where("username LIKE ?", "%"+username+"%").Find(&users).Error; err != nil {
+		return nil, err
+	}
+
+	return users, nil
+}
+
 func UsernameExist(db *gorm.DB, username string) bool {
 	var count int64
 	if err := db.Model(&User{}).Where("username = ?", username).Count(&count).Error; err != nil {

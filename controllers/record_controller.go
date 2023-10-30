@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"NewApp/db"
+	"NewApp/database"
 	"NewApp/models"
 	"net/http"
 	"strconv"
@@ -29,7 +29,7 @@ func CreateRecord(c *gin.Context) {
 		return
 	}
 
-	newRecord, err := models.CreateRecord(db.GetDB(), record.Title, record.Artist, record.Genre, record.ReleaseYear, record.Description, record.Price, record.Status, record.SellerID)
+	newRecord, err := models.CreateRecord(database.GetDB(), record.Title, record.Artist, record.Genre, record.ReleaseYear, record.Description, record.Price, record.Status, record.SellerID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -51,7 +51,7 @@ func UpdateRecord(c *gin.Context) {
 		return
 	}
 
-	updatedRecord, err := models.UpdateRecord(db.GetDB(), uint(recordID), record.Title, record.Artist, record.Genre, record.ReleaseYear, record.Description, record.Price, record.Status)
+	updatedRecord, err := models.UpdateRecord(database.GetDB(), uint(recordID), record.Title, record.Artist, record.Genre, record.ReleaseYear, record.Description, record.Price, record.Status)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -67,7 +67,7 @@ func DeleteRecord(c *gin.Context) {
 		return
 	}
 
-	err = models.DeleteRecord(db.GetDB(), uint(recordID))
+	err = models.DeleteRecord(database.GetDB(), uint(recordID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -83,7 +83,7 @@ func GetRecordByID(c *gin.Context) {
 		return
 	}
 
-	record, err := models.GetRecordByID(db.GetDB(), uint(recordID))
+	record, err := models.GetRecordByID(database.GetDB(), uint(recordID))
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
 		return
@@ -106,7 +106,7 @@ func GetAllRecords(c *gin.Context) {
 			return
 		}
 	}
-	records, err := models.GetAllRecords(db.GetDB(), filters)
+	records, err := models.GetAllRecords(database.GetDB(), filters)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -133,7 +133,7 @@ func GetRecordsBySellerID(c *gin.Context) {
 			return
 		}
 	}
-	records, err := models.GetRecordsBySellerID(db.GetDB(), filters, uint(sellerID))
+	records, err := models.GetRecordsBySellerID(database.GetDB(), filters, uint(sellerID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
