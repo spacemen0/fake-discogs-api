@@ -1,6 +1,12 @@
 package models
 
 import (
+	"NewApp/config"
+	"errors"
+	"time"
+
+	"github.com/dgrijalva/jwt-go"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -13,10 +19,16 @@ type User struct {
 }
 
 func CreateUser(db *gorm.DB, username, email, password string) (*User, error) {
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
+
 	user := &User{
 		Username: username,
 		Email:    email,
-		Password: password,
+		Password: string(hashedPassword),
 	}
 
 	if err := db.Create(user).Error; err != nil {
@@ -95,4 +107,36 @@ func EmailExist(db *gorm.DB, email string) bool {
 		return false
 	}
 	return count > 0
+}
+
+func UserLogin(db *gorm.DB, username, password string) (string, error) {
+	var user User
+	if err := db.Where("username = ?", username).First(&user).Error; err != nil {
+		return "", errors.New("invalid username or password")
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+		return "", errors.New("invalid username or password")
+	}
+
+	token, err := generateJWTToken(user.ID)
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
+}
+
+func generateJWTToken(user_id uint) (string, error) {
+	c := config.GetConfig()
+
+	claims := jwt.MapClaims{
+		"user_id": user_id,
+		"exp":     time.Now().Add(time.Hour * 24).Unix(),
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	secretKey := []byte(c.GetString("jwt.secret"))
+	tokenString, err := token.SignedString(secretKey)
+	return tokenString, err
 }

@@ -20,6 +20,7 @@ func CreateUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Username already exists"})
 		return
 	}
+
 	if models.EmailExist(database.GetDB(), user.Email) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Email already exists"})
 		return
@@ -107,4 +108,18 @@ func GetUsersByUsername(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, users)
+}
+
+func UserLogin(c *gin.Context) {
+	var user models.User
+	if err := c.BindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	token, err := models.UserLogin(database.GetDB(), user.Username, user.Password)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, token)
 }

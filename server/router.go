@@ -2,6 +2,7 @@ package server
 
 import (
 	"NewApp/controllers"
+	"NewApp/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,6 +10,8 @@ import (
 func NewRouter() *gin.Engine {
 	router := gin.Default()
 
+	router.Use(middlewares.CORSMiddleware())
+	router.Use(middlewares.AuthMiddleware())
 	v1 := router.Group("api/v1")
 	{
 		v1.GET("get-record/:id", controllers.GetRecordByID)
