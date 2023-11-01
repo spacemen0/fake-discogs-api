@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"NewApp/config"
 	"net/http"
 	"strings"
 
@@ -10,6 +11,7 @@ import (
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		config := config.GetConfig()
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header required"})
@@ -19,7 +21,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 
-			return []byte("my_secret_key"), nil
+			return []byte(config.GetString("jwt.secret")), nil
 		})
 
 		if err != nil {
@@ -38,8 +40,12 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// You can now access the claims in your handlers
-		c.Set("user_id", claims["user_id"])
+		userID, ok := claims["user_id"].(float64)
+		if !ok {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid user_id claim"})
+			return
+		}
+		c.Set("user_id", int(userID))
 
 		c.Next()
 	}

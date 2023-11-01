@@ -1,6 +1,6 @@
 module NewApp
 
-go 1.21.1 // corrected to valid go version '1.21'
+go 1.21.1
 
 require (
 	github.com/gin-gonic/gin v1.9.1

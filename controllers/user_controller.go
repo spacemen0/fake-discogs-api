@@ -77,11 +77,7 @@ func DeleteUser(c *gin.Context) {
 }
 
 func GetUserByID(c *gin.Context) {
-	userID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
-		return
-	}
+	userID := c.GetInt("user_id")
 	user, err := models.GetUserByID(database.GetDB(), uint(userID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
