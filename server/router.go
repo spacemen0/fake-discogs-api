@@ -19,7 +19,7 @@ func NewRouter() *gin.Engine {
 		v1.POST("user-login", controllers.UserLogin)
 		v1.GET("get-record/:id", controllers.GetRecordByID)
 		v1.POST("/get-records", controllers.GetAllRecords)
-		v1.POST("/get-records-by-seller-id/:id", controllers.GetRecordsBySellerID)
+		v1.POST("/get-records-by-seller-name/:name", controllers.GetRecordsBySellerName)
 
 	}
 	v1.Use(middlewares.AuthMiddleware())
@@ -28,8 +28,8 @@ func NewRouter() *gin.Engine {
 		v1.DELETE("delete-record/:id", controllers.DeleteRecord)
 		v1.POST("/create-record", controllers.CreateRecord)
 		v1.GET("get-user", controllers.GetUserByID)
-		v1.PUT("/update-user/:id", controllers.UpdateUser)
-		v1.DELETE("delete-user/:id", controllers.DeleteUser)
+		v1.PUT("/update-user", controllers.UpdateUser)
+		v1.DELETE("delete-user", controllers.DeleteUser)
 	}
 	return router
 }

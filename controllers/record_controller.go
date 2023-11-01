@@ -28,7 +28,7 @@ func CreateRecord(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	record.SellerID = uint(c.GetInt("user_id"))
 	newRecord, err := models.CreateRecord(database.GetDB(), record.Title, record.Artist, record.Genre, record.ReleaseYear, record.Description, record.Price, record.Status, record.SellerID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -115,12 +115,8 @@ func GetAllRecords(c *gin.Context) {
 	c.JSON(http.StatusOK, records)
 }
 
-func GetRecordsBySellerID(c *gin.Context) {
-	sellerID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid seller ID"})
-		return
-	}
+func GetRecordsBySellerName(c *gin.Context) {
+	sellerName := c.Param("name")
 	var filters []models.Filter
 
 	if err := c.BindJSON(&filters); err != nil {
@@ -133,7 +129,7 @@ func GetRecordsBySellerID(c *gin.Context) {
 			return
 		}
 	}
-	records, err := models.GetRecordsBySellerID(database.GetDB(), filters, uint(sellerID))
+	records, err := models.GetRecordsBySellerName(database.GetDB(), filters, sellerName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

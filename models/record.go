@@ -14,7 +14,7 @@ type Record struct {
 	Description string
 	Price       float64 `gorm:"not null" json:"price" binding:"required"`
 	Status      string  `gorm:"not null" json:"status" binding:"required"`
-	SellerID    uint    `gorm:"not null" json:"seller_id" binding:"required"`
+	SellerID    uint    `gorm:"not null" json:"seller_id"`
 }
 
 type Filter struct {
@@ -100,10 +100,13 @@ func GetAllRecords(db *gorm.DB, filters []Filter) ([]Record, error) {
 	return records, nil
 }
 
-func GetRecordsBySellerID(db *gorm.DB, filters []Filter, sellerID uint) ([]Record, error) {
+func GetRecordsBySellerName(db *gorm.DB, filters []Filter, sellerName string) ([]Record, error) {
 	var records []Record
-
-	query := db.Where("seller_id = ?", sellerID)
+	user, err := GetUserByUsername(db, sellerName)
+	if err != nil {
+		return nil, err
+	}
+	query := db.Where("seller_id = ?", user.ID)
 
 	for _, filter := range filters {
 		query = query.Where(filter.Field, filter.Value)

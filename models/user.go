@@ -43,9 +43,13 @@ func UpdateUser(db *gorm.DB, userID uint, username, email, password string) (*Us
 	if err != nil {
 		return nil, err
 	}
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
+	}
 	user.Username = username
 	user.Email = email
-	user.Password = password
+	user.Password = string(hashedPassword)
 	if err = db.Save(user).Error; err != nil {
 		return nil, err
 	}
