@@ -7,11 +7,11 @@ import (
 type Record struct {
 	gorm.Model
 
-	Title       string `gorm:"not null" json:"title" binding:"required"`
-	Artist      string `gorm:"not null" json:"artist" binding:"required"`
-	ReleaseYear uint   `gorm:"not null" json:"release_year" binding:"required"`
-	Genre       string `gorm:"not null" json:"genre" binding:"required"`
-	Description string
+	Title       string  `gorm:"not null" json:"title" binding:"required"`
+	Artist      string  `gorm:"not null" json:"artist" binding:"required"`
+	ReleaseYear uint    `gorm:"not null" json:"release_year" binding:"required"`
+	Genre       string  `gorm:"not null" json:"genre" binding:"required"`
+	Description string  `json:"description"`
 	Price       float64 `gorm:"not null" json:"price" binding:"required"`
 	Status      string  `gorm:"not null" json:"status" binding:"required"`
 	SellerID    uint    `gorm:"not null" json:"seller_id"`
