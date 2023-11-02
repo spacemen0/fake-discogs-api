@@ -21,13 +21,11 @@ func Init() error {
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("error opening database: %v", err)
-		os.Exit(1)
 	}
 	db.AutoMigrate(models.User{}, models.Record{})
 	var count int64
 	if err := db.Raw("SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema = ? AND table_name = ? AND index_name = ?", c.GetString("database.name"), "records", "fulltext_search").Count(&count).Error; err != nil {
 		log.Fatalf("error checking index: %v", err)
-		os.Exit(1)
 	}
 	if count == 0 {
 		if err := db.Exec("CREATE FULLTEXT INDEX fulltext_search ON records (title, artist, description)").Error; err != nil {
