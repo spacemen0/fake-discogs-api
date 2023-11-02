@@ -1,8 +1,8 @@
 package server
 
 import (
-	"NewApp/controllers"
-	"NewApp/middlewares"
+	"fake-discogs-api/controllers"
+	"fake-discogs-api/middlewares"
 
 	"github.com/gin-gonic/gin"
 )

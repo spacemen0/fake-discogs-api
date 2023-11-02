@@ -1,9 +1,9 @@
 package main
 
 import (
-	"NewApp/config"
-	"NewApp/database"
-	"NewApp/server"
+	"fake-discogs-api/config"
+	"fake-discogs-api/database"
+	"fake-discogs-api/server"
 	"flag"
 	"fmt"
 	"os"

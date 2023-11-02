@@ -1,8 +1,8 @@
 package models
 
 import (
-	"NewApp/config"
 	"errors"
+	"fake-discogs-api/config"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"

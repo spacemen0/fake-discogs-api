@@ -1,6 +1,6 @@
 package server
 
-import "NewApp/config"
+import "fake-discogs-api/config"
 
 func Init() {
 	config := config.GetConfig()

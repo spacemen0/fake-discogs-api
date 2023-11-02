@@ -1,4 +1,4 @@
-module NewApp
+module fake-discogs-api
 
 go 1.21.1
 

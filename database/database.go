@@ -1,8 +1,8 @@
 package database
 
 import (
-	"NewApp/config"
-	"NewApp/models"
+	"fake-discogs-api/config"
+	"fake-discogs-api/models"
 	"log"
 	"os"
 

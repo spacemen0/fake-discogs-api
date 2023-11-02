@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"NewApp/database"
-	"NewApp/models"
+	"fake-discogs-api/database"
+	"fake-discogs-api/models"
 	"net/http"
 	"strconv"
 

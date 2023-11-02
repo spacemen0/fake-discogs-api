@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"NewApp/config"
+	"fake-discogs-api/config"
 	"net/http"
 	"strings"
 

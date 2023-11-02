@@ -1,1 +1,1 @@
-# NewApp
+# fake-discogs-api
