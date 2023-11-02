@@ -137,3 +137,27 @@ func GetRecordsBySellerName(c *gin.Context) {
 
 	c.JSON(http.StatusOK, records)
 }
+
+func SearchRecordsWithPagination(c *gin.Context) {
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", "10"))
+	searchTerm := c.Query("search_term")
+	var filters []models.Filter
+	if err := c.BindJSON(&filters); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	for _, filter := range filters {
+		if !isFieldAllowed(filter.Field) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid field"})
+			return
+		}
+	}
+	records, err := models.SearchRecordsWithPagination(database.GetDB(), filters, searchTerm, page, perPage)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, records)
+}

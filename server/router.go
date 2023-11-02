@@ -20,7 +20,7 @@ func NewRouter() *gin.Engine {
 		v1.GET("get-record/:id", controllers.GetRecordByID)
 		v1.POST("/get-records", controllers.GetAllRecords)
 		v1.POST("/get-records-by-seller-name/:name", controllers.GetRecordsBySellerName)
-
+		v1.POST("search-records", controllers.SearchRecordsWithPagination)
 	}
 	v1.Use(middlewares.AuthMiddleware())
 	{

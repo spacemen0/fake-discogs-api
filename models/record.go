@@ -119,12 +119,15 @@ func GetRecordsBySellerName(db *gorm.DB, filters []Filter, sellerName string) ([
 	return records, nil
 }
 
-func SearchRecordsWithPagination(db *gorm.DB, query string, page, perPage int) ([]Record, error) {
+func SearchRecordsWithPagination(db *gorm.DB, filters []Filter, searchTerm string, page, perPage int) ([]Record, error) {
 	var records []Record
 
 	offset := (page - 1) * perPage
-
-	if err := db.Where("MATCH(title, artist, description) AGAINST (?)", query).
+	query := db
+	for _, filter := range filters {
+		query = query.Where(filter.Field, filter.Value)
+	}
+	if err := db.Where("MATCH(title, artist, description) AGAINST (?)", searchTerm).
 		Limit(perPage).
 		Offset(offset).
 		Find(&records).Error; err != nil {
