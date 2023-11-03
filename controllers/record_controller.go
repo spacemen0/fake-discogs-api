@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var allowedFields = []string{"title", "artist", "genre", "release_year", "description", "price", "status", "seller_id"}
+var allowedFields = []string{"genre", "release_year", "status"}
 var allowedStatuses = []string{"available", "reserved", "sold"}
 var allowedGenres = []string{"rock", "pop", "jazz", "hip-hop", "electronic", "classical", "metal", "country", "folk", "blues", "reggae", "latin", "punk", "indie", "r&b", "soul", "funk", "dance", "world", "experimental", "new age", "spoken", "children's", "comedy", "other"}
 
@@ -34,7 +34,6 @@ func CreateRecord(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusCreated, newRecord)
 }
 
@@ -56,7 +55,6 @@ func UpdateRecord(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusOK, updatedRecord)
 }
 
@@ -161,3 +159,37 @@ func SearchRecordsWithPagination(c *gin.Context) {
 
 	c.JSON(http.StatusOK, records)
 }
+
+// func updateAvailableFilterValue(record *models.Record) {
+// 	c := config.GetConfig()
+// 	genres := c.GetStringSlice("filters.genres")
+// 	years := c.GetIntSlice("filters.years")
+// 	if !containsElementString(genres, record.Genre) {
+// 		genres = append(genres, record.Genre)
+// 	}
+// 	if !containsElementInt(years, int(record.ReleaseYear)) {
+// 		years = append(years, int(record.ReleaseYear))
+// 	}
+// 	viper.Set("filters.genres", genres)
+// 	viper.Set("filters.years", years)
+// 	fmt.Printf("genres: %v\n", genres)
+// 	viper.SafeWriteConfigAs("../config/development.yaml")
+// }
+
+// func containsElementString(slice []string, element string) bool {
+// 	for _, e := range slice {
+// 		if e == element {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
+
+// func containsElementInt(slice []int, element int) bool {
+// 	for _, e := range slice {
+// 		if e == element {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
