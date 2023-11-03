@@ -2,6 +2,7 @@
 *.mod
 *.sum
 *.log
+*.exe
 /tmp
 /build
 /dist
