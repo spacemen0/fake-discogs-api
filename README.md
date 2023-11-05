@@ -7,4 +7,4 @@
 - [ ] add transaction
 - [ ] user can add items to wanted list
 - [ ] improve fuzzy search
-
+- [ ] add fields verification when creating records
