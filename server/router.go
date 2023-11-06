@@ -14,8 +14,8 @@ func NewRouter() *gin.Engine {
 	{
 		v1.GET("get-user-by-username/:username", controllers.GetUserByUsername)
 		v1.GET("get-users-by-username/:username", controllers.GetUsersByUsername)
-		v1.POST("/create-user", controllers.CreateUser)
-		v1.POST("user-login", controllers.UserLogin)
+		v1.POST("/user-register", controllers.CreateUser)
+		v1.POST("user-login/:option", controllers.UserLogin)
 		v1.GET("get-record/:id", controllers.GetRecordByID)
 		v1.POST("/get-records", controllers.GetAllRecords)
 		v1.POST("/get-records-by-seller-name/:name", controllers.GetRecordsBySellerName)

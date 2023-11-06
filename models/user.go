@@ -113,7 +113,7 @@ func EmailExist(db *gorm.DB, email string) bool {
 	return count > 0
 }
 
-func UserLogin(db *gorm.DB, username, password string) (string, error) {
+func UserLoginByUsername(db *gorm.DB, username, password string) (string, error) {
 	var user User
 	if err := db.Where("username = ?", username).First(&user).Error; err != nil {
 		return "", errors.New("invalid username or password")
@@ -121,6 +121,24 @@ func UserLogin(db *gorm.DB, username, password string) (string, error) {
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		return "", errors.New("invalid username or password")
+	}
+
+	token, err := generateJWTToken(user.ID)
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
+}
+
+func UserLoginByEmail(db *gorm.DB, email, password string) (string, error) {
+	var user User
+	if err := db.Where("email = ?", email).First(&user).Error; err != nil {
+		return "", errors.New("invalid email or password")
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+		return "", errors.New("invalid email or password")
 	}
 
 	token, err := generateJWTToken(user.ID)

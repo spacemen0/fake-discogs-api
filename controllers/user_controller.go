@@ -98,15 +98,30 @@ func GetUsersByUsername(c *gin.Context) {
 }
 
 func UserLogin(c *gin.Context) {
+	option := c.Param("option")
 	var user models.User
 	if err := c.BindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	token, err := models.UserLogin(database.GetDB(), user.Username, user.Password)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	if option == "email" {
+		token, err := models.UserLoginByEmail(database.GetDB(), user.Email, user.Password)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, token)
+	} else if option == "username" {
+
+		token, err := models.UserLoginByUsername(database.GetDB(), user.Username, user.Password)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, token)
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid option"})
 		return
 	}
-	c.JSON(http.StatusOK, token)
+
 }
