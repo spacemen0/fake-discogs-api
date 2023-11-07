@@ -8,6 +8,6 @@
 - [ ] user can add items to wanted list
 - [ ] improve fuzzy search
 - [ ] add fields verification when creating records
-- [ ] login either username or email
+- [x] login either username or email
 - [ ] add check out
 - [ ] add cart
