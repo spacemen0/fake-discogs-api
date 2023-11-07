@@ -10,3 +10,4 @@
 - [ ] add fields verification when creating records
 - [ ] login either username or email
 - [ ] add check out
+- [ ] add cart
