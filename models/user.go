@@ -16,6 +16,7 @@ type User struct {
 	Username string `gorm:"unique;not null" json:"username" binding:"required"`
 	Email    string `gorm:"unique;not null" json:"email"`
 	Password string `gorm:"not null" json:"password" binding:"required"`
+	Bio      string `json:"bio"`
 }
 
 func CreateUser(db *gorm.DB, username, email, password string) (*User, error) {
@@ -80,7 +81,7 @@ func GetUserByID(db *gorm.DB, userID uint) (*User, error) {
 
 func GetUserByUsername(db *gorm.DB, username string) (*User, error) {
 	var user User
-	if err := db.Where("username = ?", username).First(&user).Error; err != nil {
+	if err := db.Select("username, bio").Where("username = ?", username).First(&user).Error; err != nil {
 		return nil, err
 	}
 
@@ -90,7 +91,7 @@ func GetUserByUsername(db *gorm.DB, username string) (*User, error) {
 func GetUsersByUsername(db *gorm.DB, username string) ([]User, error) {
 	var users []User
 
-	if err := db.Where("username LIKE ?", "%"+username+"%").Find(&users).Error; err != nil {
+	if err := db.Select("username, bio").Where("username LIKE ?", "%"+username+"%").Find(&users).Error; err != nil {
 		return nil, err
 	}
 
