@@ -3,7 +3,8 @@
 ## To be implemented
 
 - [ ] return available filter values
-- [ ] add image
+- [x] add image
+- [ ] generate random image URL
 - [ ] add transaction
 - [ ] user can add items to wanted list
 - [ ] improve fuzzy search
