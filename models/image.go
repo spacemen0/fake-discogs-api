@@ -5,8 +5,8 @@ import "gorm.io/gorm"
 type Image struct {
 	gorm.Model
 
-	RecordID uint   `gorm:"unique;not null" json:"record-id" binding:"required"`
-	Url      string `gorm:"unique;not null" json:"url" binding:"required"`
+	RecordID uint   `gorm:"not null" json:"record-id"`
+	Url      string `gorm:"unique;not null" json:"url"`
 }
 
 func CreateImage(db *gorm.DB, recordID uint, url string) (*Image, error) {

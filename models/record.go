@@ -118,6 +118,13 @@ func GetRecordsBySellerName(db *gorm.DB, filters []Filter, sellerName string) ([
 
 	return records, nil
 }
+func GetSellerID(db *gorm.DB, RecordID uint) (uint, error) {
+	var record Record
+	if err := db.First(&record, RecordID).Error; err != nil {
+		return 0, err
+	}
+	return record.SellerID, nil
+}
 
 func SearchRecordsWithPagination(db *gorm.DB, filters []Filter, searchTerm string, page, perPage int) ([]Record, error) {
 	var records []Record
