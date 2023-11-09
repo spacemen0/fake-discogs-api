@@ -102,11 +102,11 @@ func GetAllRecords(db *gorm.DB, filters []Filter) ([]Record, error) {
 
 func GetRecordsBySellerName(db *gorm.DB, filters []Filter, sellerName string) ([]Record, error) {
 	var records []Record
-	user, err := GetUserByUsername(db, sellerName)
+	ID, err := getIDByUsername(db, sellerName)
 	if err != nil {
 		return nil, err
 	}
-	query := db.Where("seller_id = ?", user.ID)
+	query := db.Where("seller_id = ?", ID)
 
 	for _, filter := range filters {
 		query = query.Where(filter.Field, filter.Value)
