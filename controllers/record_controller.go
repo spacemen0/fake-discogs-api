@@ -28,8 +28,8 @@ func CreateRecord(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	record.SellerID = uint(c.GetInt("user_id"))
-	newRecord, err := models.CreateRecord(database.GetDB(), record.Title, record.Artist, record.Genre, record.ReleaseYear, record.Description, record.Price, record.Status, record.SellerID)
+	SellerID := uint(c.GetInt("user_id"))
+	newRecord, err := models.CreateRecord(database.GetDB(), record.Title, record.Artist, record.Genre, record.ReleaseYear, record.Description, record.Price, record.Status, SellerID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

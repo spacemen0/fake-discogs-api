@@ -14,7 +14,7 @@ type Record struct {
 	Description string  `json:"description"`
 	Price       float64 `gorm:"not null" json:"price" binding:"required"`
 	Status      string  `gorm:"not null" json:"status" binding:"required"`
-	SellerID    uint    `gorm:"not null" json:"seller_id"`
+	SellerName  string  `gorm:"not null" json:"seller_name"`
 }
 
 type Filter struct {
@@ -23,6 +23,10 @@ type Filter struct {
 }
 
 func CreateRecord(db *gorm.DB, title, artist string, genre string, releaseYear uint, description string, price float64, status string, sellerID uint) (*Record, error) {
+	seller, err := GetUserByID(db, sellerID)
+	if err != nil {
+		return nil, err
+	}
 	record := &Record{
 		Title:       title,
 		Artist:      artist,
@@ -31,7 +35,7 @@ func CreateRecord(db *gorm.DB, title, artist string, genre string, releaseYear u
 		Description: description,
 		Price:       price,
 		Status:      status,
-		SellerID:    sellerID,
+		SellerName:  seller.Username,
 	}
 
 	if err := db.Create(record).Error; err != nil {
@@ -102,11 +106,7 @@ func GetAllRecords(db *gorm.DB, filters []Filter) ([]Record, error) {
 
 func GetRecordsBySellerName(db *gorm.DB, filters []Filter, sellerName string) ([]Record, error) {
 	var records []Record
-	ID, err := getIDByUsername(db, sellerName)
-	if err != nil {
-		return nil, err
-	}
-	query := db.Where("seller_id = ?", ID)
+	query := db.Where("seller_name = ?", sellerName)
 
 	for _, filter := range filters {
 		query = query.Where(filter.Field, filter.Value)
@@ -118,12 +118,12 @@ func GetRecordsBySellerName(db *gorm.DB, filters []Filter, sellerName string) ([
 
 	return records, nil
 }
-func GetSellerID(db *gorm.DB, RecordID uint) (uint, error) {
+func GetSellerName(db *gorm.DB, RecordID uint) (string, error) {
 	var record Record
 	if err := db.First(&record, RecordID).Error; err != nil {
-		return 0, err
+		return "", err
 	}
-	return record.SellerID, nil
+	return record.SellerName, nil
 }
 
 func SearchRecordsWithPagination(db *gorm.DB, filters []Filter, searchTerm string, page, perPage int) ([]Record, error) {
