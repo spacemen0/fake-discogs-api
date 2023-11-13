@@ -15,6 +15,7 @@ type Record struct {
 	Price       float64 `gorm:"not null" json:"price" binding:"required"`
 	Status      string  `gorm:"not null" json:"status" binding:"required"`
 	SellerName  string  `gorm:"not null" json:"seller_name"`
+	ImageUrl    string  `json:"image_url"`
 }
 
 type Filter struct {

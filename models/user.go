@@ -132,14 +132,6 @@ func UserLoginByUsername(db *gorm.DB, username, password string) (string, error)
 	return token, nil
 }
 
-// func getIDByUsername(db *gorm.DB, username string) (uint, error) {
-// 	var user User
-// 	if err := db.Where("username = ?", username).First(&user).Error; err != nil {
-// 		return 0, errors.New("invalid username")
-// 	}
-// 	return user.ID, nil
-// }
-
 func UserLoginByEmail(db *gorm.DB, email, password string) (string, error) {
 	var user User
 	if err := db.Where("email = ?", email).First(&user).Error; err != nil {
