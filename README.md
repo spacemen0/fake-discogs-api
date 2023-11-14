@@ -4,7 +4,7 @@
 
 - [ ] return available filter values
 - [x] add image
-- [ ] generate random image URL
+- [x] generate random image URL
 - [ ] add transaction
 - [ ] user can add items to wanted list
 - [ ] improve fuzzy search
