@@ -22,7 +22,7 @@ func Init() error {
 	if err != nil {
 		log.Fatalf("error opening database: %v", err)
 	}
-	db.AutoMigrate(models.User{}, models.Record{})
+	db.AutoMigrate(models.User{}, models.Record{}, models.Image{})
 	var count int64
 	if err := db.Raw("SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema = ? AND table_name = ? AND index_name = ?", c.GetString("database.name"), "records", "fulltext_search").Count(&count).Error; err != nil {
 		log.Fatalf("error checking index: %v", err)

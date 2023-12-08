@@ -11,9 +11,20 @@ import (
 )
 
 func CreateImage(c *gin.Context) {
+	recordIDstr := c.Param("id")
+	recordID, err := strconv.Atoi(recordIDstr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	file, err := c.FormFile("image")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	_, err = models.GetImageByID(database.GetDB(), uint(recordID))
+	if err == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Image already exists"})
 		return
 	}
 	imageUrl := generateUUID()
@@ -21,12 +32,6 @@ func CreateImage(c *gin.Context) {
 	err = c.SaveUploadedFile(file, imagePath)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	recordIDstr := c.Param("id")
-	recordID, err := strconv.Atoi(recordIDstr)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	newImage, err := models.CreateImage(database.GetDB(), uint(recordID), imageUrl)
