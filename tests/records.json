@@ -1,0 +1,92 @@
+[
+    {
+        "title": "Is This It",
+        "artist": "The Strokes",
+        "release_year": 2001,
+        "genre": "Indie Rock",
+        "description": "A raw and infectious debut that revitalized rock for a new generation.",
+        "price": 17.99,
+        "status": "available"
+    },
+    {
+        "title": "In Utero",
+        "artist": "Nirvana",
+        "release_year": 1993,
+        "genre": "Alternative Rock",
+        "description": "A raw, unapologetic, and honest reflection of grunge's essence.",
+        "price": 19.5,
+        "status": "available"
+    },
+    {
+        "title": "Funeral",
+        "artist": "Arcade Fire",
+        "release_year": 2004,
+        "genre": "Indie Rock",
+        "description": "An emotionally powerful and sonically rich album with anthemic tunes.",
+        "price": 18.0,
+        "status": "available"
+    },
+    {
+        "title": "Yankee Hotel Foxtrot",
+        "artist": "Wilco",
+        "release_year": 2002,
+        "genre": "Alternative Rock",
+        "description": "A bold experimentation in sound that became an indie classic.",
+        "price": 20.25,
+        "status": "available"
+    },
+    {
+        "title": "Unknown Pleasures",
+        "artist": "Joy Division",
+        "release_year": 1979,
+        "genre": "Post-Punk",
+        "description": "A hauntingly atmospheric album that defined a genre.",
+        "price": 21.0,
+        "status": "available"
+    },
+    {
+        "title": "Siamese Dream",
+        "artist": "The Smashing Pumpkins",
+        "release_year": 1993,
+        "genre": "Alternative Rock",
+        "description": "An ambitious and grandiose sonic journey through the '90s.",
+        "price": 22.5,
+        "status": "available"
+    },
+    {
+        "title": "Turn On the Bright Lights",
+        "artist": "Interpol",
+        "release_year": 2002,
+        "genre": "Indie Rock",
+        "description": "A moody and atmospheric album that defined a post-punk revival.",
+        "price": 19.75,
+        "status": "available"
+    },
+    {
+        "title": "Antics",
+        "artist": "Interpol",
+        "release_year": 2004,
+        "genre": "Indie Rock",
+        "description": "A follow-up to their debut, continuing their unique sound.",
+        "price": 18.5,
+        "status": "available"
+    },
+    {
+        "title": "Merriweather Post Pavilion",
+        "artist": "Animal Collective",
+        "release_year": 2009,
+        "genre": "Experimental Rock",
+        "description": "A mind-bending and eclectic album pushing the boundaries of sound.",
+        "price": 23.0,
+        "status": "available"
+    },
+    {
+        "title": "The Suburbs",
+        "artist": "Arcade Fire",
+        "release_year": 2010,
+        "genre": "Indie Rock",
+        "description": "An exploration of suburban life with a blend of nostalgia and commentary.",
+        "price": 20.99,
+        "status": "available"
+    }
+]
