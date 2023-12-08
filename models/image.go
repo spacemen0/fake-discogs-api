@@ -23,7 +23,7 @@ func CreateImage(db *gorm.DB, recordID uint, url string) (*Image, error) {
 }
 
 func UpdateImage(db *gorm.DB, imageID uint, recordID uint, url string) (*Image, error) {
-	image, err := GetImageByID(db, imageID)
+	image, err := GetImageByRecordID(db, imageID)
 	if err != nil {
 		return nil, err
 	}
@@ -38,9 +38,9 @@ func UpdateImage(db *gorm.DB, imageID uint, recordID uint, url string) (*Image, 
 	return image, nil
 }
 
-func GetImageByID(db *gorm.DB, imageID uint) (*Image, error) {
+func GetImageByRecordID(db *gorm.DB, recordID uint) (*Image, error) {
 	var image *Image
-	if err := db.First(image, imageID).Error; err != nil {
+	if err := db.Where("record_id = ?", recordID).First(&image).Error; err != nil {
 		return nil, err
 	}
 
