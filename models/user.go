@@ -72,7 +72,7 @@ func DeleteUser(db *gorm.DB, userID uint) error {
 
 func GetUserByID(db *gorm.DB, userID uint) (*User, error) {
 	var user User
-	if err := db.First(&user, userID).Error; err != nil {
+	if err := db.Select("id, username, email, bio").First(&user, userID).Error; err != nil {
 		return nil, err
 	}
 
