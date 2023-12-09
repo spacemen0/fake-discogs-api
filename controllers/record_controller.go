@@ -74,6 +74,17 @@ func DeleteRecord(c *gin.Context) {
 	c.JSON(http.StatusNoContent, gin.H{})
 }
 
+func DeleteAllRecordsBySellerID(c *gin.Context) {
+	sellerID := uint(c.GetInt("user_id"))
+	err := models.DeleteAllRecordsBySellerID(database.GetDB(), sellerID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusNoContent, gin.H{})
+}
+
 func GetRecordByID(c *gin.Context) {
 	recordID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
