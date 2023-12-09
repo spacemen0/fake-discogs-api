@@ -79,10 +79,15 @@ func DeleteRecord(db *gorm.DB, recordID uint) error {
 
 	return nil
 }
-func DeleteAllRecordsBySellerID(db *gorm.DB, sellerID uint) error {
+
+func DeleteAllRecordsBySellerName(db *gorm.DB, sellerName string) error {
 	var records []Record
-	if err := db.Where("seller_id = ?", sellerID).Find(&records).Error; err != nil {
+	if err := db.Where("seller_name = ?", sellerName).Find(&records).Error; err != nil {
 		return err
+	}
+
+	if len(records) == 0 {
+		return nil
 	}
 
 	if err := db.Delete(&records).Error; err != nil {

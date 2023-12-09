@@ -59,16 +59,24 @@ func UpdateUser(c *gin.Context) {
 
 func DeleteUser(c *gin.Context) {
 	userID := c.GetInt("user_id")
-	err := models.DeleteUser(database.GetDB(), uint(userID))
+	username, err := models.GetUsernameByID(database.GetDB(), uint(userID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	err = models.DeleteAllRecordsBySellerID(database.GetDB(), uint(userID))
+
+	err = models.DeleteAllRecordsBySellerName(database.GetDB(), username)
+	if err != nil && err.Error() != "record not found" {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = models.DeleteUser(database.GetDB(), uint(userID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 	c.JSON(http.StatusNoContent, gin.H{})
 }
 

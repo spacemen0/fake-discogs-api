@@ -79,6 +79,15 @@ func GetUserByID(db *gorm.DB, userID uint) (*User, error) {
 	return &user, nil
 }
 
+func GetUsernameByID(db *gorm.DB, userID uint) (string, error) {
+	var user User
+	if err := db.Select("username").First(&user, userID).Error; err != nil {
+		return "", err
+	}
+
+	return user.Username, nil
+}
+
 func GetUserByUsername(db *gorm.DB, username string) (*User, error) {
 	var user User
 	if err := db.Select("username, bio").Where("username = ?", username).First(&user).Error; err != nil {
