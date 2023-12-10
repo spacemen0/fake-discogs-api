@@ -1,6 +1,8 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Image struct {
 	gorm.Model
@@ -16,6 +18,10 @@ func CreateImage(db *gorm.DB, recordID uint, url string) (*Image, error) {
 	}
 
 	if err := db.Create(image).Error; err != nil {
+		return nil, err
+	}
+	_, err := UpdateImageUrl(db, recordID, url)
+	if err != nil {
 		return nil, err
 	}
 
@@ -34,7 +40,10 @@ func UpdateImage(db *gorm.DB, imageID uint, recordID uint, url string) (*Image, 
 	if err = db.Save(image).Error; err != nil {
 		return nil, err
 	}
-
+	_, err = UpdateImageUrl(db, recordID, url)
+	if err != nil {
+		return nil, err
+	}
 	return image, nil
 }
 
@@ -55,6 +64,9 @@ func DeleteImage(db *gorm.DB, imageID uint) error {
 	if err := db.Delete(&image).Error; err != nil {
 		return err
 	}
-
+	_, err := UpdateImageUrl(db, image.RecordID, "")
+	if err != nil {
+		return err
+	}
 	return nil
 }

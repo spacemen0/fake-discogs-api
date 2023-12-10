@@ -102,7 +102,6 @@ func GetRecordByID(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
 		return
 	}
-
 	c.JSON(http.StatusOK, record)
 }
 

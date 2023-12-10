@@ -161,3 +161,18 @@ func SearchRecordsWithPagination(db *gorm.DB, filters []Filter, searchTerm strin
 
 	return records, nil
 }
+
+func UpdateImageUrl(db *gorm.DB, recordID uint, imageUrl string) (*Record, error) {
+	record, err := GetRecordByID(db, recordID)
+	if err != nil {
+		return nil, err
+	}
+
+	record.ImageUrl = imageUrl
+
+	if err = db.Save(record).Error; err != nil {
+		return nil, err
+	}
+
+	return record, nil
+}
