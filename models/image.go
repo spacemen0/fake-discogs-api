@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fake-discogs-api/utils"
+
 	"gorm.io/gorm"
 )
 
@@ -64,9 +66,42 @@ func DeleteImage(db *gorm.DB, imageID uint) error {
 	if err := db.Delete(&image).Error; err != nil {
 		return err
 	}
-	_, err := UpdateImageUrl(db, image.RecordID, "")
-	if err != nil {
+	record, err := GetRecordByID(db, image.RecordID)
+	if err != nil && err.Error() != "record not found" {
 		return err
 	}
+	if record != nil {
+		_, err := UpdateImageUrl(db, image.RecordID, "")
+		if err != nil {
+			return err
+		}
+	}
+	utils.DeleteImageFile(image.Url)
+	return nil
+}
+
+func DeleteImageByRecordID(db *gorm.DB, recordID uint) error {
+	var image Image
+	err := db.Where("record_id = ?", recordID).First(&image).Error
+	if err.Error() == "record not found" || err.Error() == "record not found or invalid" {
+		return nil
+	} else if err != nil {
+		return err
+	}
+	if err := db.Delete(&image).Error; err != nil {
+		return err
+	}
+	utils.DeleteImageFile(image.Url)
+	record, err := GetRecordByID(db, image.RecordID)
+	if err != nil && err.Error() != "record not found" {
+		return err
+	}
+	if record != nil {
+		_, err := UpdateImageUrl(db, image.RecordID, "")
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }

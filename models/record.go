@@ -76,7 +76,10 @@ func DeleteRecord(db *gorm.DB, recordID uint) error {
 	if err := db.Delete(&record).Error; err != nil {
 		return err
 	}
-
+	err := DeleteImageByRecordID(db, recordID)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -93,7 +96,12 @@ func DeleteAllRecordsBySellerName(db *gorm.DB, sellerName string) error {
 	if err := db.Delete(&records).Error; err != nil {
 		return err
 	}
-
+	for _, record := range records {
+		err := DeleteImageByRecordID(db, record.ID)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
