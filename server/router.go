@@ -11,6 +11,7 @@ func NewRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(middlewares.CORSMiddleware())
 	v1 := router.Group("api/v1")
+	v1.Static("/images", "./images")
 	{
 		v1.GET("get-user-by-username/:username", controllers.GetUserByUsername)
 		v1.GET("get-users-by-username/:username", controllers.GetUsersByUsername)
